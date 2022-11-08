@@ -11,6 +11,7 @@ For the presentation we use the following git commit message labesl:
 * [auto] automation, ci/cd e.t.c.
 * [style] formatting, styling, e.t.c.
 * [doc] documentation, like this document
+* [legal] Licensing information and other stuff related to legal
 
 ## Switching demos
 
