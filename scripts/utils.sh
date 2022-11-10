@@ -4,7 +4,7 @@
 # "Selection B"
 # "Selection C"
 # )
-# 
+#
 # choose_from_menu "Please make a choice:" selected_choice "${selections[@]}"
 # echo "Selected choice: $selected_choice"
 
@@ -18,7 +18,7 @@ function choose_from_menu() {
     while true
     do
         # list all options (option list is zero-based)
-        index=0 
+        index=0
         for o in "${options[@]}"
         do
             if [ "$index" == "$cur" ]
@@ -43,10 +43,27 @@ function choose_from_menu() {
     printf -v $outvar "${options[$cur]}"
 }
 
+# list demos into variables "$demos"
+function list_demos() {
+    demos=$(git log --all --grep='demo//*' | grep 'demo//*' | cut -d '/' -f 2 | sort | uniq)
+    IFS=$'\n'
+    demos=($demos)
+}
+
+# list the commits of a demo
+# $0 is supposed to be the demo name
+function list_demo_commits() {
+    commits=$(git log --all --grep="demo/${1}//*" --pretty=format:'%h')
+    IFS=$'\n'
+    commits=($commits)
+}
+
+function get_demo_commit_branch() {
+  branch=$(git show ${2} | grep "demo/${1}//*" | cut -d '/' -f 3)
+}
+
 # choose one of the demos
 function choose_demo() {
-    local demos=$(git tag -l "demo/*" | cut -d '/' -f 2 | uniq)
-    IFS=$'\n'
-    local demos=($demos)
+    list_demos
     choose_from_menu "Select Demo:" demo "${demos[@]}"
 }

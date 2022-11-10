@@ -1,3 +1,6 @@
 #!/bin/env bash
 
-git tag -l "demo/*" | cut -d '/' -f 2 | uniq
+source $(dirname "$0")/utils.sh
+
+list_demos
+echo "${demos[@]}"

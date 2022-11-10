@@ -1,4 +1,6 @@
-#/bin/env bash
+#!/bin/env bash
+
+set -e
 
 source $(dirname "$0")/utils.sh
 
@@ -14,22 +16,21 @@ git checkout main
 git branch | grep -v \* | xargs git branch -D || echo "No branches deleted"
 
 # now list the branches for the demo
-branches=$(git tag -l "demo/${demo}/*" | grep -oP "^demo/${demo}/\K.*" | uniq)
+list_demo_commits "${demo}"
 
-IFS=$'\n'
-branches=($branches)
-
-echo "Setting up branches: ${branches[@]}"
-
-for branch in "${branches[@]}"; do
+for commit in "${commits[@]}"; do
+    get_demo_commit_branch "${demo}" "${commit}"
+    echo "Setting up branch ${branch} on commit ${commit}"
     if [[ $branch == "main" ]]; then
         git checkout main
-        git reset --hard "demo/${demo}/${branch}"
+        git reset --hard $commit
     else
-        echo "git checkout -b $branch \"demo/${demo}/${branch}\""
-        git checkout -b $branch "demo/${demo}/${branch}"
+        echo "git checkout -b $branch $commit"
+        git checkout -b $branch $commit
     fi
 done
 
 # switch to main
 git checkout main
+
+reset

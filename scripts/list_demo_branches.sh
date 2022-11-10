@@ -6,6 +6,9 @@ choose_demo
 
 echo "Listing branches for '${demo}'"
 
-branches=$(git tag -l "demo/${demo}/*" | grep -oP "^demo/${demo}/\K.*" | uniq)
+list_demo_commits "${demo}"
 
-echo $branches
+for commit in "${commits[@]}"; do
+    get_demo_commit_branch "${demo}" "${commit}"
+    echo $branch
+done
